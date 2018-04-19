@@ -53,8 +53,9 @@ if __name__=="__main__":
         webApi.createConnection(waDB, user, password, host, port)
 
     if createUsers.lower() == 'y' or createUsers.lower() == 'yes' or createUsers.lower() == 'true':
+        #REPLICATION could be added to ohdsi_admin role
         webApi.executeCommand('''CREATE ROLE ohdsi_admin
-                                    CREATEDB REPLICATION
+                                    CREATEDB
                                      VALID UNTIL 'infinity';
                                     COMMENT ON ROLE ohdsi_admin
                                     IS 'Administration group for OHDSI applications';''')
@@ -75,7 +76,8 @@ if __name__=="__main__":
         print('\n==> Users created <==\n')
     elif createUsers.lower() != '' and createUsers.lower() != 'n' and createUsers.lower() != 'no' and createUsers.lower() != 'false':
         print('\n==> Could not understand whether to create users or not, did not create them <==\n')
-
+    webApi.close()
+    webApi.createConnection(waDB, "ohdsi_admin_user", "admin1", host, port)
     if createDb.lower() == "y" or createDb.lower() == "yes" or createDb.lower() == 'true':
         webApi.executeCommand('''CREATE DATABASE "{0}"
                                     WITH ENCODING='UTF8'
@@ -86,8 +88,6 @@ if __name__=="__main__":
                                     GRANT ALL ON DATABASE "{0}" TO GROUP ohdsi_admin;
                                     GRANT CONNECT, TEMPORARY ON DATABASE "{0}" TO GROUP ohdsi_app;'''.format(waDB))
         print('\n==> Database {} created <==\n'.format(waDB))
-    webApi.close()
-    webApi.createConnection(waDB, "ohdsi_admin_user", "admin1", host, port)
     webApi.executeCommand('''CREATE SCHEMA {0}
                                      AUTHORIZATION ohdsi_admin;
                                 COMMENT ON SCHEMA {0}
