@@ -77,7 +77,7 @@ if __name__=="__main__":
     elif createUsers.lower() != '' and createUsers.lower() != 'n' and createUsers.lower() != 'no' and createUsers.lower() != 'false':
         print('\n==> Could not understand whether to create users or not, did not create them <==\n')
     webApi.close()
-    webApi.createConnection(waDB, "ohdsi_admin_user", "admin1", host, port)
+    webApi.createConnection(dbName, "ohdsi_admin_user", "admin1", host, port)
     if createDb.lower() == "y" or createDb.lower() == "yes" or createDb.lower() == 'true':
         webApi.executeCommand('''CREATE DATABASE "{0}"
                                     WITH ENCODING='UTF8'
@@ -88,6 +88,8 @@ if __name__=="__main__":
                                     GRANT ALL ON DATABASE "{0}" TO GROUP ohdsi_admin;
                                     GRANT CONNECT, TEMPORARY ON DATABASE "{0}" TO GROUP ohdsi_app;'''.format(waDB))
         print('\n==> Database {} created <==\n'.format(waDB))
+    webApi.close()
+    webApi.createConnection(waDB, "ohdsi_admin_user", "admin1", host, port)
     webApi.executeCommand('''CREATE SCHEMA {0}
                                      AUTHORIZATION ohdsi_admin;
                                 COMMENT ON SCHEMA {0}
