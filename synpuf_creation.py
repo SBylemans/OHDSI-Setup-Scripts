@@ -48,15 +48,18 @@ if __name__=="__main__":
     with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/create_CDMv5_tables.sql", 'r') as createTables:
         synpufDB.executeCommand(createTables.read().format(mainSchema))
 
+    webApiDB = databaseConfig.get('webapidb',"OHDSI")
+    dir = os.getcwd().replace('\\','/')+"/"+setupDir
+
     with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/load_CDMv5_vocabulary.sql", 'r') as loadVoc:
         with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/load_CDMv5_vocabulary_formatted.sql", "w") as formattedVoc:
             formattedVoc.write(loadVoc.read().format(mainSchema, os.getcwd().replace('\\','/')+"/"+setupDir+"/"+vocDir))
-    subprocess.call("psql -h {0} -p {1} -U {2} -w -d {3} -f \"{4}\"".format(host, port, user, databaseConfig.get('webapidb', "OHDSI"), os.getcwd().replace('\\','/')+"/"+setupDir+"/load_CDMv5_vocabulary_formatted.sql"))
+    subprocess.call(["psql", "-h {0}".format(host), "-p {0}".format(port), "-U {0}".format(user), "-w", "-d {0}".format(webApiDB), "-f \"{0}\"".format(dir+"/load_CDMv5_vocabulary_formatted.sql")])
 
     with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/load_CDMv5_synpuf.sql", 'r') as loadSyn:
         with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/load_CDMv5_synpuf_formatted.sql", "w") as formattedSyn:
             formattedSyn.write(loadSyn.read().format(mainSchema, os.getcwd().replace('\\','/')+"/"+setupDir))
-    subprocess.call("psql -h {0} -p {1} -U {2} -w -d {3} -f \"{4}\"".format(host, port, user, databaseConfig.get('webapidb', "OHDSI"), os.getcwd().replace('\\','/')+"/"+setupDir+"/load_CDMv5_synpuf_formatted.sql"))
+    subprocess.call(["psql", "-h {0}".format(host), "-p {0}".format(port), "-U {0}".format(user), "-w", "-d {0}".format(webApiDB), "-f \"{0}\"".format(dir+"/load_CDMv5_synpuf_formatted.sql")])
 
     with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/create_CDMv5_constraints.sql", 'r') as createConstraints:
         synpufDB.executeCommand(createConstraints.read().format(mainSchema))
