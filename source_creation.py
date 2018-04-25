@@ -42,7 +42,7 @@ if __name__=="__main__":
     sourceId = 0
     sourceDaimonId = 0
     oldDaimonId = 0
-    connectionString = "jdbc:postgresql://{}:{}/{}?user={}&password={}".format(host, port, waDB, user, password)
+    connectionString = "jdbc:postgresql://{}:{}/{}?user={}&password={}".format(host, port, waDB, "ohdsi_admin_user", "admin1")
 
     sources = config.get('sources',[])
 
