@@ -34,15 +34,15 @@ if __name__=="__main__":
     vocDir = synpufConfig.get("vocabulary_dir", "voc_all")
 
 
-    if platform.system() == "Windows":
-        if not os.path.exists(os.getenv('APPDATA')+"\\postgresql\\"):
-            os.makedirs(os.getenv('APPDATA')+"\\postgresql\\")
-        with open(os.getenv('APPDATA')+"\\postgresql\\pgpass.conf", 'w') as passFile:
-            passFile.write('{0}:{1}:{2}:{3}:{4}'.format(host.strip(),port,databaseConfig.get('webapidb', "OHDSI"),user, password))
-    elif platform.system() == "Linux":
-        with open(os.getenv('HOME')+"/.pgpass", 'w') as passFile:
-            passFile.write('{0}:{1}:{2}:{3}:{4}'.format(host.strip(),port,databaseConfig.get('webapidb', "OHDSI"),user, password))
-        os.chmod(os.getenv('HOME')+"/.pgpass", 0600)
+    # if platform.system() == "Windows":
+    #     if not os.path.exists(os.getenv('APPDATA')+"\\postgresql\\"):
+    #         os.makedirs(os.getenv('APPDATA')+"\\postgresql\\")
+    #     with open(os.getenv('APPDATA')+"\\postgresql\\pgpass.conf", 'w') as passFile:
+    #         passFile.write('{0}:{1}:{2}:{3}:{4}'.format(host.strip(),port,databaseConfig.get('webapidb', "OHDSI"),user, password))
+    # elif platform.system() == "Linux":
+    #     with open(os.getenv('HOME')+"/.pgpass", 'w') as passFile:
+    #         passFile.write('{0}:{1}:{2}:{3}:{4}'.format(host.strip(),port,databaseConfig.get('webapidb', "OHDSI"),user, password))
+    #     os.chmod(os.getenv('HOME')+"/.pgpass", 0600)
 
     with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/create_CDMv5_tables.sql", 'r') as createTables:
         synpufDB.executeCommand(createTables.read().format(mainSchema))
