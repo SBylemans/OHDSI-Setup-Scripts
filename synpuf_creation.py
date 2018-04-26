@@ -42,7 +42,7 @@ if __name__=="__main__":
     elif platform.system() == "Linux":
         with open(os.getenv('HOME')+"/.pgpass", 'w') as passFile:
             passFile.write('{0}:{1}:{2}:{3}:{4}'.format(host.strip(),port,databaseConfig.get('webapidb', "OHDSI"),user, password))
-        os.chmod(os.getenv('HOME')+"/.pgpass", 600)
+        os.chmod(os.getenv('HOME')+"/.pgpass", 0600)
 
     with open(os.getcwd().replace('\\','/')+"/"+setupDir+"/create_CDMv5_tables.sql", 'r') as createTables:
         synpufDB.executeCommand(createTables.read().format(mainSchema))
