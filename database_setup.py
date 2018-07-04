@@ -4,47 +4,25 @@ import yaml
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file", help="File with properties", action="store")
+    parser.add_argument("file", help="File with properties")
     settings = parser.parse_args()
 
-    if not settings.file:
-        host = input("Enter host (localhost): ")
-        host = ("localhost" if host == '' else host)
-        port = input("Enter port (5432): ")
-        port = ("5432" if port == '' else port)
-        user = input("Enter username (postgres): ")
-        user = ('postgres' if user == '' else user)
-        password = input("Enter password (admin): ")
-        password = ('admin' if password == '' else password)
-        createDb = input("Create database? (n)")
-        if createDb.lower() == "y" or createDb.lower() == "yes" or createDb.lower() == 'true':
-            dbName = input("Enter database name from which to create WebAPI (postgres): ")
-            dbName = ('postgres' if dbName == '' else dbName)
-        waDB = input("Enter WebAPI database name (OHDSI): ")
-        waDB = ('OHDSI' if waDB == '' else waDB)
-        createUsers = input("Create users? (n)")
-        #TODO: Add possibility to name users
-        webApiSchema = input("Enter webapi schema name (webapi): ")
-        webApiSchema = ("webapi" if webApiSchema == '' else webApiSchema.lower().strip().replace(" ", "_"))
-        resultsSchema = input("Enter results schema name (webapi): ")
-        resultsSchema = ("webapi" if resultsSchema == '' else resultsSchema.lower().strip().replace(" ", "_"))
-    else:
-        with open(settings.file, 'r') as ymlfile:
-            config = yaml.load(ymlfile)
-        databaseConfig = config.get('database')
+    with open(settings.file, 'r') as ymlfile:
+        config = yaml.load(ymlfile)
+    databaseConfig = config.get('database')
 
-        host =  databaseConfig.get('host', "localhost")
-        port =  databaseConfig.get('port', "5432")
-        user =  databaseConfig.get('username', "postgres")
-        password =  databaseConfig.get('password', "admin")
-        createDb =  str(databaseConfig.get('create-database', "no"))
-        if createDb.lower() == "y" or createDb.lower() == "yes" or createDb.lower() == "true":
-            dbName =  databaseConfig.get('sourcedb', "postgres")
-        waDB =  databaseConfig.get('webapidb', "OHDSI")
-        createUsers =  str(databaseConfig.get('create-users', "no"))
-        #TODO: Add possibility to name users
-        webApiSchema =  databaseConfig.get('webapi-schema', "webapi").lower().strip().replace(" ", "_")
-        resultsSchema =  databaseConfig.get('results-schema', "webapi").lower().strip().replace(" ", "_")
+    host =  databaseConfig.get('host', "localhost")
+    port =  databaseConfig.get('port', "5432")
+    user =  databaseConfig.get('username', "postgres")
+    password =  databaseConfig.get('password', "admin")
+    createDb =  str(databaseConfig.get('create-database', "no"))
+    if createDb.lower() == "y" or createDb.lower() == "yes" or createDb.lower() == "true":
+        dbName =  databaseConfig.get('sourcedb', "postgres")
+    waDB =  databaseConfig.get('webapidb', "OHDSI")
+    createUsers =  str(databaseConfig.get('create-users', "no"))
+    #TODO: Add possibility to name users
+    webApiSchema =  databaseConfig.get('webapi-schema', "webapi").lower().strip().replace(" ", "_")
+    resultsSchema =  databaseConfig.get('results-schema', "webapi").lower().strip().replace(" ", "_")
 
     webApi = DataBase()
     if createDb.lower() == "y" or createDb.lower() == "yes" or createDb.lower() == "true":
